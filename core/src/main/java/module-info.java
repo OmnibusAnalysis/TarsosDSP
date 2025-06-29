@@ -16,4 +16,5 @@ module TarsosDSP.core {
     exports be.tarsos.dsp;
 
     requires java.logging;
+    requires java.desktop;
 }
