@@ -21,16 +21,16 @@
 * 
 */
 
-package be.tarsos.dsp.test;
+package tests_todo;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
@@ -60,7 +60,7 @@ public class ComplexOnsetTests {
 			public void handleOnset(double actualTime, double salience) {
 				double expectedTime = expectedOnsets[i];
 				System.out.println(actualTime);
-				assertEquals("Onset time should be the expected value!",expectedTime,actualTime,0.017417);
+				assertEquals(expectedTime, actualTime, 0.017417, "Onset time should be the expected value!");
 				i++;
 			}
 		});

@@ -22,9 +22,9 @@
 */
 
 
-package be.tarsos.dsp.test;
+package tests_todo;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -41,7 +41,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import be.tarsos.dsp.io.TarsosDSPAudioFloatConverter;
 import be.tarsos.dsp.io.jvm.JVMAudioInputStream;

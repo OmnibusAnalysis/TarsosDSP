@@ -1,10 +1,12 @@
-package be.tarsos.dsp.test;
+package tests_todo;
 
 import be.tarsos.dsp.resample.Resampler;
 import be.tarsos.dsp.wavelet.lift.Daubechies4Wavelet;
 
 public class ImpulseDetection {
 
+	// Add org.junit.jupiter.api.Test import if needed
+	
 	public static void main(String[] args) {
 		
 		double sampleRate = 2000.0;

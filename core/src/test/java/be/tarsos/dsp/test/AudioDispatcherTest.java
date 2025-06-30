@@ -56,10 +56,11 @@ public class AudioDispatcherTest {
 		adp.setZeroPadFirstBuffer(true);
 		adp.setZeroPadLastBuffer(true);
 		adp.addAudioProcessor(new AudioProcessor() {
-			int bufferCounter = 0;
+			final int[] bufferCounter = {0};
 			
 			@Override
 			public boolean process(AudioEvent audioEvent) {
+				System.out.println("process called, bufferCounter=" + bufferCounter[0] + ", samplesProcessed=" + audioEvent.getSamplesProcessed());
 				//Check if the first samples are zero
 				if(audioEvent.getSamplesProcessed()==0){
 					for(int i = 0 ; i < (bufferSize - stepSize); i++){
@@ -75,13 +76,13 @@ public class AudioDispatcherTest {
 					}
 					assertEquals(bufferSize,audioEvent.getBufferSize(),"Buffer size should always equal 4096");
 				}
-				bufferCounter++;
+				bufferCounter[0]++;
 				return true;
 			}
 			
 			@Override
 			public void processingFinished() {
-				assertEquals(2,bufferCounter,"Should have processed 2 buffers.");
+				assertEquals(2,bufferCounter[0],"Should have processed 2 buffers.");
 			}
 			
 		});

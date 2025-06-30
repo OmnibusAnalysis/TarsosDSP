@@ -22,12 +22,12 @@
 */
 
 
-package be.tarsos.dsp.test;
+package tests_todo;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.io.PipedAudioStream;
@@ -47,6 +47,7 @@ public class AudioPlayerTest {
 	}
 	
 	
+	@Test
 	public void testStreamAudioPlayer() throws UnsupportedAudioFileException, LineUnavailableException{
 		PipedAudioStream file = new PipedAudioStream("http://mp3.streampower.be/stubru-high.mp3");
 		TarsosDSPAudioInputStream stream = file.getMonoStream(44100,0);

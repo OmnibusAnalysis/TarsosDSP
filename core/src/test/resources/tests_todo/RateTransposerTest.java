@@ -21,7 +21,7 @@
 * 
 */
 
-package be.tarsos.dsp.test;
+package tests_todo;
 
 import java.io.IOException;
 
@@ -29,7 +29,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.WaveformSimilarityBasedOverlapAdd;

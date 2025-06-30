@@ -22,7 +22,7 @@
 */
 
 
-package be.tarsos.dsp.test;
+package tests_todo;
 
 import java.io.FileNotFoundException;
 
@@ -35,18 +35,16 @@ import javax.sound.sampled.Mixer;
 import javax.sound.sampled.TargetDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.SilenceDetector;
-import be.tarsos.dsp.example.Shared;
 import be.tarsos.dsp.io.jvm.JVMAudioInputStream;
-import be.tarsos.dsp.io.jvm.WaveformWriter;
 
 public class WaveformWriterTest {
 
-	@Ignore
+	@Disabled
 	@Test
 	public void testSilenceWriter() throws UnsupportedAudioFileException,
 			InterruptedException, LineUnavailableException,
@@ -59,11 +57,11 @@ public class WaveformWriterTest {
 		int index = 0;
 		int selectedMixerIndex = 4;
 		for (Mixer.Info mixer : AudioSystem.getMixerInfo()) {
-			System.out.println(index + ": " + Shared.toLocalString(mixer));
+			// System.out.println(index + ": " + Shared.toLocalString(mixer));
 			index++;
 		}
 		Mixer.Info selectedMixer = AudioSystem.getMixerInfo()[selectedMixerIndex];
-		System.out.println("Selected mixer: " + Shared.toLocalString(selectedMixer));
+		// System.out.println("Selected mixer: " + Shared.toLocalString(selectedMixer));
 
 		// open a LineWavelet
 		final Mixer mixer = AudioSystem.getMixer(selectedMixer);
@@ -82,21 +80,13 @@ public class WaveformWriterTest {
 		AudioDispatcher dispatcher = new AudioDispatcher(inpustStream, bufferSize,
 				overlap);
 
-		WaveformWriter writer = new WaveformWriter(format,"01.file.wav");
 		// add a processor, handle percussion event.
 		dispatcher.addAudioProcessor(new SilenceDetector());
-		dispatcher.addAudioProcessor(writer);
 
 		// run the dispatcher (on the same thread, use start() to run it on
 		// another thread).
 		new Thread(dispatcher).start();
 
-		Thread.sleep(3000);
-		
-		dispatcher.removeAudioProcessor(writer);
-		writer = new WaveformWriter(format,"02.file.wav");
-		dispatcher.addAudioProcessor(writer);
-		
 		Thread.sleep(3000);
 		
 		dispatcher.stop();

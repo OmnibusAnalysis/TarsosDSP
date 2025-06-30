@@ -22,7 +22,7 @@
 */
 
 
-package be.tarsos.dsp.test;
+package tests_todo;
 
 import java.io.IOException;
 
@@ -35,10 +35,9 @@ import javax.sound.sampled.Mixer;
 import javax.sound.sampled.TargetDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import be.tarsos.dsp.AudioDispatcher;
-import be.tarsos.dsp.example.Shared;
 import be.tarsos.dsp.io.jvm.JVMAudioInputStream;
 import be.tarsos.dsp.onsets.PercussionOnsetDetector;
 import be.tarsos.dsp.onsets.PrintOnsetHandler;
@@ -57,11 +56,11 @@ public class PercussionOnsetTest {
 		int index = 0;
 		int selectedMixerIndex = 3;
 		for(Mixer.Info mixer : AudioSystem.getMixerInfo()){
-			System.out.println(index + ": " + Shared.toLocalString(mixer));
+			System.out.println(index + ": " + mixer.getName());
 			index++;
 		}
 		Mixer.Info selectedMixer = AudioSystem.getMixerInfo()[selectedMixerIndex];
-		System.out.println("Selected mixer: " + Shared.toLocalString(selectedMixer));
+		System.out.println("Selected mixer: " + selectedMixer.getName());
 		
 		//open a LineWavelet
 		final Mixer mixer = AudioSystem.getMixer(selectedMixer);		

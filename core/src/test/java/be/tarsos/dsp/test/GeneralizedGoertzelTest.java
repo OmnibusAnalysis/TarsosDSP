@@ -57,6 +57,7 @@ public class GeneralizedGoertzelTest {
         ad.addAudioProcessor(generalized);
         ad.run();
 
+        System.out.println("DEBUG: Running testSelCallDetection, symbolsAccumulator=" + symbolsAccumulator);
         assertEquals(symbolsAccumulator,"042E1","The decoded selCall should be the expected value.");
     }
 

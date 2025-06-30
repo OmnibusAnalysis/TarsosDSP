@@ -40,49 +40,12 @@ import be.tarsos.dsp.io.PipedAudioStream;
 import be.tarsos.dsp.io.TarsosDSPAudioFloatConverter;
 import be.tarsos.dsp.io.TarsosDSPAudioInputStream;
 
-/**
- * The Factory creates {@link AudioDispatcher} objects from various sources: the
- * configured default microphone, PCM wav files or PCM samples piped from a
- * sub-process. It depends on the javax.sound.* packages and does not work on Android.
- * 
- * @author Joren Six
- * @see AudioDispatcher
- */
 public class AudioDispatcherFactory {
 
-	/**
-	 * Create a new AudioDispatcher connected to the default microphone. The default is defined by the 
-	 * Java runtime by calling <pre>AudioSystem.getTargetDataLine(format)</pre>. 
-	 * The microphone must support the format: 44100Hz sample rate, 16bits mono, signed big endian.   
-	 * @param audioBufferSize
-	 *            The size of the buffer defines how much samples are processed
-	 *            in one step. Common values are 1024,2048.
-	 * @param bufferOverlap
-	 *            How much consecutive buffers overlap (in samples). Half of the
-	 *            AudioBufferSize is common.
-	 * @return An audio dispatcher connected to the default microphone.
-	 * @throws LineUnavailableException
-	 */
 	public static AudioDispatcher fromDefaultMicrophone(final int audioBufferSize, final int bufferOverlap) throws LineUnavailableException {
 		return fromDefaultMicrophone(44100, audioBufferSize, bufferOverlap);
 	}
 	
-	/**
-	 * Create a new AudioDispatcher connected to the default microphone. The default is defined by the 
-	 * Java runtime by calling <pre>AudioSystem.getTargetDataLine(format)</pre>. 
-	 * The microphone must support the format of the requested sample rate, 16bits mono, signed big endian.   
-	 * @param sampleRate
-	 * 			The <b>requested</b> sample rate must be supported by the capture device. Nonstandard sample 
-	 * 			rates can be problematic!
-	 * @param audioBufferSize
-	 *            The size of the buffer defines how much samples are processed
-	 *            in one step. Common values are 1024,2048.
-	 * @param bufferOverlap
-	 *            How much consecutive buffers overlap (in samples). Half of the
-	 *            AudioBufferSize is common.
-	 * @return An audio dispatcher connected to the default microphone.
-	 * @throws LineUnavailableException
-	 */
 	public static AudioDispatcher fromDefaultMicrophone(final int sampleRate,final int audioBufferSize, final int bufferOverlap) throws LineUnavailableException {
 		final AudioFormat format = new AudioFormat(sampleRate, 16, 1, true,true);
 		TargetDataLine line =  AudioSystem.getTargetDataLine(format);
@@ -93,24 +56,6 @@ public class AudioDispatcherFactory {
 		return new AudioDispatcher(audioStream,audioBufferSize,bufferOverlap);
 	}
 	
-	/**
-	 * Create a stream from an array of bytes and use that to create a new
-	 * AudioDispatcher.
-	 * 
-	 * @param byteArray
-	 *            An array of bytes, containing audio information.
-	 * @param audioFormat
-	 *            The format of the audio represented using the bytes.
-	 * @param audioBufferSize
-	 *            The size of the buffer defines how much samples are processed
-	 *            in one step. Common values are 1024,2048.
-	 * @param bufferOverlap
-	 *            How much consecutive buffers overlap (in samples). Half of the
-	 *            AudioBufferSize is common.
-	 * @return A new AudioDispatcher.
-	 * @throws UnsupportedAudioFileException
-	 *             If the audio format is not supported.
-	 */
 	public static AudioDispatcher fromByteArray(final byte[] byteArray, final AudioFormat audioFormat,
 			final int audioBufferSize, final int bufferOverlap) throws UnsupportedAudioFileException {
 		final ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
@@ -120,21 +65,6 @@ public class AudioDispatcherFactory {
 		return new AudioDispatcher(audioStream, audioBufferSize, bufferOverlap);
 	}
 	
-	
-	/**
-	 * Create a stream from an URL and use that to create a new AudioDispatcher
-	 * 
-	 * @param audioURL
-	 *            The URL describing the stream..
-	 * @param audioBufferSize
-	 *            The number of samples used in the buffer.
-	 * @param bufferOverlap 
-	 * @return A new audio processor.
-	 * @throws UnsupportedAudioFileException
-	 *             If the audio file is not supported.
-	 * @throws IOException
-	 *             When an error occurs reading the file.
-	 */
 	public static AudioDispatcher fromURL(final URL audioURL, final int audioBufferSize,final int bufferOverlap)
 	throws UnsupportedAudioFileException, IOException {
 		final AudioInputStream stream = AudioSystem.getAudioInputStream(audioURL);
@@ -142,44 +72,10 @@ public class AudioDispatcherFactory {
 		return new AudioDispatcher(audioStream, audioBufferSize, bufferOverlap);
 	}
 	
-	/**
-	 * Create a stream from a piped sub process and use that to create a new
-	 * {@link AudioDispatcher} The sub-process writes a WAV-header and
-	 * PCM-samples to standard out. The header is ignored and the PCM samples
-	 * are are captured and interpreted. Examples of executables that can
-	 * convert audio in any format and write to stdout are ffmpeg and avconv.
-	 * 
-	 * @param source
-	 *            The file or stream to capture.
-	 * @param targetSampleRate
-	 *            The target sample rate.
-	 * @param audioBufferSize
-	 *            The number of samples used in the buffer.
-	 * @param bufferOverlap
-	 * @return A new audioprocessor.
-	 */
 	public static AudioDispatcher fromPipe(final String source,final int targetSampleRate, final int audioBufferSize,final int bufferOverlap){
 		return fromPipe(source, targetSampleRate, audioBufferSize, bufferOverlap,0);
 	}
 	
-	/**
-	 * Create a stream from a piped sub process and use that to create a new
-	 * {@link AudioDispatcher} The sub-process writes a WAV-header and
-	 * PCM-samples to standard out. The header is ignored and the PCM samples
-	 * are are captured and interpreted. Examples of executables that can
-	 * convert audio in any format and write to stdout are ffmpeg and avconv.
-	 * 
-	 * @param source
-	 *            The file or stream to capture.
-	 * @param targetSampleRate
-	 *            The target sample rate.
-	 * @param audioBufferSize
-	 *            The number of samples used in the buffer.
-	 * @param bufferOverlap
-	 * @param startTimeOffset 
-	 * 			  Number of seconds to skip
-	 * @return A new audioprocessor.
-	 */
 	public static AudioDispatcher fromPipe(final String source,final int targetSampleRate, final int audioBufferSize,final int bufferOverlap,final double startTimeOffset){
 		if(source.startsWith("http") || (new File(source).exists() && new File(source).isFile() && new File(source).canRead())){
 			PipedAudioStream f = new PipedAudioStream(source);
@@ -190,26 +86,6 @@ public class AudioDispatcherFactory {
 		}
 	}
 	
-	/**
-	 * Create a stream from a piped sub process and use that to create a new
-	 * {@link AudioDispatcher} The sub-process writes a WAV-header and
-	 * PCM-samples to standard out. The header is ignored and the PCM samples
-	 * are are captured and interpreted. Examples of executables that can
-	 * convert audio in any format and write to stdout are ffmpeg and avconv.
-	 * 
-	 * @param source
-	 *            The file or stream to capture.
-	 * @param targetSampleRate
-	 *            The target sample rate.
-	 * @param audioBufferSize
-	 *            The number of samples used in the buffer.
-	 * @param bufferOverlap
-	 * @param startTimeOffset 
-	 * 			  Number of seconds to skip
-	 * @param numberOfSeconds
-	 * 			  Number of seconds to pipe
-	 * @return A new audioprocessor.
-	 */
 	public static AudioDispatcher fromPipe(final String source,final int targetSampleRate, final int audioBufferSize,final int bufferOverlap,final double startTimeOffset,final double numberOfSeconds){
 		if(new File(source).exists()&&new File(source).isFile() && new File(source).canRead()){
 			PipedAudioStream f = new PipedAudioStream(source);
@@ -220,21 +96,6 @@ public class AudioDispatcherFactory {
 		}
 	}
 	
-	
-	/**
-	 * Create a stream from a file and use that to create a new AudioDispatcher
-	 * 
-	 * @param audioFile
-	 *            The file.
-	 * @param audioBufferSize
-	 *            The number of samples used in the buffer.
-	 * @param bufferOverlap 
-	 * @return A new audioprocessor.
-	 * @throws UnsupportedAudioFileException
-	 *             If the audio file is not supported.
-	 * @throws IOException
-	 *             When an error occurs reading the file.
-	 */
 	public static AudioDispatcher fromFile(final File audioFile, final int audioBufferSize,final int bufferOverlap)
 			throws UnsupportedAudioFileException, IOException {
 		final AudioInputStream stream = AudioSystem.getAudioInputStream(audioFile);
@@ -242,31 +103,15 @@ public class AudioDispatcherFactory {
 		return new AudioDispatcher(audioStream, audioBufferSize, bufferOverlap);
 	}
 	
-	/**
-	 * Create a stream from an array of floats and use that to create a new
-	 * AudioDispatcher.
-	 * 
-	 * @param floatArray
-	 *            An array of floats, containing audio information.
-	 * @param sampleRate 
-	 * 			  The sample rate of the audio information contained in the buffer.
-	 * @param audioBufferSize
-	 *            The size of the buffer defines how much samples are processed
-	 *            in one step. Common values are 1024,2048.
-	 * @param bufferOverlap
-	 *            How much consecutive buffers overlap (in samples). Half of the
-	 *            AudioBufferSize is common.
-	 * @return A new AudioDispatcher.
-	 * @throws UnsupportedAudioFileException
-	 *             If the audio format is not supported.
-	 */
 	public static AudioDispatcher fromFloatArray(final float[] floatArray, final int sampleRate, final int audioBufferSize, final int bufferOverlap) throws UnsupportedAudioFileException {
-		final AudioFormat audioFormat = new AudioFormat(sampleRate, 16, 1, true, false);		
-		final TarsosDSPAudioFloatConverter converter = TarsosDSPAudioFloatConverter.getConverter(JVMAudioInputStream.toTarsosDSPFormat(audioFormat));
-		final byte[] byteArray = new byte[floatArray.length * audioFormat.getFrameSize()]; 
-		converter.toByteArray(floatArray, byteArray);
-		return AudioDispatcherFactory.fromByteArray(byteArray, audioFormat, audioBufferSize, bufferOverlap);
+		final AudioFormat format = new AudioFormat(sampleRate, 16, 1, true, false);
+		final TarsosDSPAudioFloatConverter converter = TarsosDSPAudioFloatConverter.getConverter(JVMAudioInputStream.toTarsosDSPFormat(format));
+		final byte[] byteBuffer = new byte[floatArray.length * format.getFrameSize()];
+		converter.toByteArray(floatArray, byteBuffer);
+		final ByteArrayInputStream bais = new ByteArrayInputStream(byteBuffer);
+		final long length = floatArray.length;
+		final AudioInputStream stream = new AudioInputStream(bais, format, length);
+		TarsosDSPAudioInputStream audioStream = new JVMAudioInputStream(stream);
+		return new AudioDispatcher(audioStream, audioBufferSize, bufferOverlap);
 	}
-	
-	
-}
+} 
